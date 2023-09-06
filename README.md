@@ -1,0 +1,1 @@
+# smiley-gauge-chart
