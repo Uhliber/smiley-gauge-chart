@@ -1,8 +1,8 @@
 <template>
   <div>
-    SMILEY GAUGE CHART
+    <!-- SMILEY GAUGE CHART -->
   </div>
-  <GaugeChart />
+  <!-- <GaugeChart /> -->
 </template>
 
 <script setup>

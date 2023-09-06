@@ -5,9 +5,58 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smiley Gauge Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
   </head>
   <body>
+    <div id="canvas-holder" style="width: 400px">
+      <canvas id="chart"></canvas>
+    </div>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+    <script>
+      var config = {
+        type: 'doughnut',
+        data: {
+          labels: ['Critical', 'Poor', 'Fair', 'Good', 'Excellent'],
+          datasets: [{
+            label: 'Smiley Gauge Chart',
+            data: [20, 20, 20, 20, 20],
+            borderColor: ['#ff4545', '#ffa534', '#ffe234', '#b7dd29', '#57e32c'],
+            backgroundColor: ['transparent'],
+            circumference: 180,
+            rotation: 270,
+            cutout: '60%',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              enabled: false,
+            },
+            legend: {
+              display: false,
+            },
+            labels: {
+              render: 'image',
+              images: [
+                { src: '/critical-icon.svg', width: 30, height: 30 },
+                { src: '/poor-icon.svg', width: 30, height: 30 },
+                { src: '/fair-icon.svg', width: 30, height: 30 },
+                { src: '/good-icon.svg', width: 30, height: 30 },
+                { src: '/excellent-icon.svg', width: 30, height: 30 },
+              ]
+            }
+          }
+        }
+      };
+
+      window.onload = function() {
+        var ctx = document.getElementById('chart').getContext('2d');
+        window.myChart = new Chart(ctx, config);
+      };
+    </script>
   </body>
 </html>

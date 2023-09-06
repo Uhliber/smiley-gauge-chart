@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "chart.js": "^4.4.0",
+    "chart.js-plugin-labels-dv": "^5.0.1-beta",
+    "chartjs-gauge": "^0.3.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {
