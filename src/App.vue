@@ -2,7 +2,7 @@
   <div>
     <!-- SMILEY GAUGE CHART -->
   </div>
-  <!-- <GaugeChart /> -->
+  <GaugeChart />
 </template>
 
 <script setup>
