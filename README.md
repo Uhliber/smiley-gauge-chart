@@ -1,4 +1,5 @@
 # smiley-gauge-chart
+Smiley Gauge Chart using Vue 3 + Chart.js 4 with custom plugins for svg labels and gauge needle.
 
 ## Demo
 ![gauge demo](https://github.com/Uhliber/smiley-gauge-chart/assets/75675306/a7792ff2-141f-4790-8d1d-57704f6b0f2c)
