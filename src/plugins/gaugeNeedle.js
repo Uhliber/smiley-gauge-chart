@@ -2,6 +2,7 @@ const gaugeNeedlePlugin = {
   id: 'gaugeNeedle',
   afterDatasetsDraw(chart) {
     const { ctx, data } = chart
+    const needleLength = data.datasets[0].needleLength ?? 80;
 
     ctx.save()
     const xCenter = chart.getDatasetMeta(0).data[0].x
@@ -13,6 +14,7 @@ const gaugeNeedlePlugin = {
     const angle = Math.PI / 180
 
     const needleValue = data.datasets[0].needleValue
+    const length = needleLength > 100 ? 100 : needleLength
 
     const circumference =
       (chart.getDatasetMeta(0).data[0].circumference / Math.PI / data.datasets[0].data[0]) *
@@ -27,7 +29,7 @@ const gaugeNeedlePlugin = {
     ctx.fillStyle = '#c4c4c4'
     ctx.lineWidth = 1
     ctx.moveTo(0 - radius, 0)
-    ctx.lineTo(0, 0 - innerRadius - widthSlice + 15)
+    ctx.lineTo(0, 0 - innerRadius - widthSlice + (100 - length))
     ctx.lineTo(0 + radius, 0)
     ctx.closePath()
     ctx.stroke()

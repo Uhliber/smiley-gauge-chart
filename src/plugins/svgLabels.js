@@ -4,7 +4,10 @@ const svgLabelsPlugin = {
     if (chart.config.type !== 'doughnut') return
 
     const { ctx, data } = chart
+    const labels = data.labels
     const svgIcons = data.svgLabels
+    const highlightedSvgLabel = data.datasets[0].highlightedSvgLabel;
+    const showLabels = !!data.datasets[0].showLabels;
 
     // Loop through each dataset
     chart.data.datasets.forEach(function () {
@@ -22,9 +25,9 @@ const svgLabelsPlugin = {
         const x = model.x + radius * Math.cos(angle)
         const y = model.y + radius * Math.sin(angle)
 
-        // Replace 'YourSVG' with your SVG code
         const svgIcon = svgIcons[index]
-        const svgEl = svgIcon.svg(svgIcon.color, 0)
+        const isHiglighted = highlightedSvgLabel === index;
+        const svgEl = svgIcon.svg(svgIcon.color, isHiglighted ? 0.5 : 0, isHiglighted ? 35 : 30)
 
         // Create a data URL for the SVG
         const svgData = 'data:image/svg+xml;base64,' + btoa(svgEl)
@@ -35,6 +38,25 @@ const svgLabelsPlugin = {
         img.onload = function () {
           // Draw the image on the canvas
           ctx.drawImage(img, x - img.width / 2, y - img.height / 2)
+
+          if (!showLabels) {
+            return
+          }
+
+          if (isHiglighted) {
+            ctx.font = "bold 9px Arial";
+          } else {
+            ctx.font = "8px Arial";
+          }
+          ctx.fillStyle = svgIcon.color; // Set the text color
+          ctx.textAlign = "center"; // Center the text horizontally
+
+          // Calculate the position for the text
+          var textX = x; // X-coordinate same as the image
+          var textY = y + img.height / 2 + 7; // Adjust the Y-coordinate as needed
+
+          // Draw the text on the canvas
+          ctx.fillText(labels[index].toUpperCase(), textX, textY);
         }
       })
     })
