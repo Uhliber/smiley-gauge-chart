@@ -2,18 +2,39 @@
   <div>
     <canvas ref="smileyGaugeChart" style="pointer-events: none;"></canvas>
   </div>
+  <div>
+    <div>
+      <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Gauge Value</label>
+      <div class="mt-2 flex rounded-md shadow-sm">
+        <div class="relative flex flex-grow items-stretch focus-within:z-10">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <GaugeIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+          </div>
+          <input v-model="gaugeValue" @input="handleGaugeValueInput" type="number" name="gaugeValue" id="gaugeValue" class="block w-full rounded-none rounded-l-md border-0 py-1.5 pl-10 pr-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" min="0" max="100" placeholder="Enter Gauge Value" />
+        </div>
+        <button type="button" @click="handleGaugeValueRandom" class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <DiceIcon class="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+          Random
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed, reactive, watch } from 'vue';
+import GaugeIcon from '@components/icons/GaugeIcon.vue';
+import DiceIcon from '@components/icons/DiceIcon.vue';
 import Chart from 'chart.js/auto';
 import gaugeNeedlePlugin from '@plugins/gaugeNeedle';
 import svgLabelsPlugin from '@plugins/svgLabels';
 
 Chart.register(gaugeNeedlePlugin, svgLabelsPlugin);
 
+let gaugeInputTimeout = null;
+let gaugeChartInstance = null;
+
 const smileyGaugeChart = ref(null);
-const gaugeChartInstance = ref(null);
 const gaugeValue = ref(86)
 const segments = ref([
   {
@@ -114,22 +135,40 @@ const gaugeChartOptions = reactive({
   }
 });
 
-watch(gaugeChartData, () => {
-    if (gaugeChartInstance.value) {
-      gaugeChartInstance.value?.destroy();
-      initGaugeChart();
-    }
-  },
-  { deep: true }
-);
-
 const initGaugeChart = () => {
   const ctx = smileyGaugeChart.value.getContext('2d');
-  gaugeChartInstance.value = new Chart(ctx,  {
+  gaugeChartInstance = new Chart(ctx,  {
     type: 'doughnut',
     data: gaugeChartData,
     options: gaugeChartOptions,
   });
+}
+
+const handleGaugeValueInput = () => {
+  if (gaugeInputTimeout) {
+    clearTimeout(gaugeInputTimeout);
+  }
+
+  gaugeInputTimeout = setTimeout(() => {
+    if (gaugeValue.value > 100) {
+      gaugeValue.value = 100
+    }
+    
+    updateGaugueValue();
+  }, 500);
+};
+
+const handleGaugeValueRandom = () => {
+  gaugeValue.value = Math.floor(Math.random() * (100 - 0 + 0)) + 0;
+  updateGaugueValue();
+};
+
+const updateGaugueValue = () => {
+  if (gaugeChartInstance) {
+    gaugeChartInstance.data.datasets[0].needleValue = gaugeValue.value;
+    gaugeChartInstance.data.datasets[0].highlightedSvgLabel = gaugeValueIndex.value;
+    gaugeChartInstance.update();
+  }
 }
 
 onMounted(() => {
