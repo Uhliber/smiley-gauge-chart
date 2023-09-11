@@ -24,7 +24,6 @@ const svgLabelsPlugin = {
 
         // Replace 'YourSVG' with your SVG code
         const svgIcon = svgIcons[index]
-        console.log(svgIcon.color);
         const svgEl = svgIcon.svg(svgIcon.color, 0)
 
         // Create a data URL for the SVG

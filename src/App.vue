@@ -1,7 +1,4 @@
 <template>
-  <div>
-    <!-- SMILEY GAUGE CHART -->
-  </div>
   <GaugeChart />
 </template>
 
